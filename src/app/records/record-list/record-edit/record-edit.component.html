@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+        <div class="row">
+          <div class="col-sm-2 form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" class="form-control" #nameInput
+            name="name" ngModel required>
+          </div>
+          <div class="col-sm-2 form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" class="form-control" #titleInput
+            name="title" ngModel>
+          </div>
+          <div class="col-sm-1 form-group">
+            <label for="year">year</label>
+            <input type="text" id="title" class="form-control" #yearInput
+            name="year" ngModel required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2 form-group">
+            <label for="artistname">Artist Name</label>
+            <input type="text" id="artistname" class="form-control" #artistnameInput
+            name="artistname" ngModel required>
+          </div>
+          <div class="col-sm-2 form-group">
+            <label for="worth">Worth</label>
+            <input type="text" id="worth" class="form-control" #worthInput
+            name="worth" ngModel >
+          </div>
+          <div class="col-sm-2 form-group">
+            <label for="serial_nr">serial nr</label>
+            <input type="text" id="serial_nr" class="form-control" #serial_nrInput
+            name="serial_nr" ngModel >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2 form-group">
+            <label for="damage">Damage</label>
+            <textarea id="damage" class="form-control" #damageInput
+            name="damage" ngModel ></textarea >
+          </div>
+          <div class="col-sm-2 form-group">
+            <label for="serial_nr">Description</label>
+            <textarea  type="text" id="description" class="form-control" #descriptionInput
+            name="description" ngModel ></textarea >
+          </div>
+          <div class="col-sm-2 form-group">
+            <label for="cover_image">Cover Image</label>
+            <input type ="text" id="cover_image" class="form-control" #cover_imageInput
+            name="cover_image" ngModel >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+           <!--  <button class="btn btn-success" type="submit" (click)="onAddItem()">Add</button> -->
+           <button class="btn btn-success" type="submit" [disabled]="!f.valid">{{editModel? 'update' : 'add'}}</button>
+            <button class="btn btn-danger" type="button" (click)="onDelete()" [disabled]="!editModel">Delete</button>
+            <button class="btn btn-primary" type="button" (click)="onClear()">Clear</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
