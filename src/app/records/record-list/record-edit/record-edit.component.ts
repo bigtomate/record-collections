@@ -31,7 +31,7 @@ export class RecordEditComponent implements OnInit, OnDestroy {
       const state = {records: {recordList:[], errorMessage:'', editItemIndex : -1 , editItemId: -1} as Records};
       Object.assign(state, item);
       const itemIdx = state?.records?.editItemIndex;
-      if (itemIdx != -1 && itemIdx) {
+      if (itemIdx != -1) {
         this.editedItem = state?.records?.recordList[itemIdx];
         if (this.editedItem) {
           this.editModel = true;
