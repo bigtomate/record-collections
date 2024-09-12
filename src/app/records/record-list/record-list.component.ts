@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {Record} from '../record-model'
+import {Record, Records} from '../record-model'
 import { Observable, Subject } from 'rxjs';
-import {RecordService} from '../reocrd-service';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { DataStorageService } from '../../shared/data-storage.service';
-import {
-  debounceTime, distinctUntilChanged, switchMap
-} from 'rxjs/operators';
+
+import {Router } from '@angular/router';
 import {Store} from '@ngrx/store'
-import {State}  from '../store/record-list.reducer'
-import * as RecordListActions from '../store/record-list.action'
-import {selectRecordList} from '../store/record-list.selector'
+import {getRecords} from '../store/record-list.selector'
+import { startEdit, updaterecord } from '../store/record-list.action';
+
 @Component({
   selector: 'app-record-list',
   templateUrl: './record-list.component.html',
@@ -19,50 +14,31 @@ import {selectRecordList} from '../store/record-list.selector'
 })
 export class RecordListComponent implements OnInit {
 
-  records: Record[] | undefined;
-  subsription!: Subscription;
-  fetchSubscription!: Subscription;
-  recordList$!: Observable<State>;
-  recordSelected = new Subject<Record>();
-  recordsChanged = new Subject<Record[]>();
+  recordList: Record[];
+  records !: Records;
   editModel: boolean;
+  recordList$!: Observable<Records>;
 
- constructor(private recordService : RecordService,
-   private router: Router,
-   private route : ActivatedRoute,
-   private dataStorageService: DataStorageService,
-   private store: Store<{recordList: State}> ) {
-    this.recordList$ = store.select(selectRecordList);
+  constructor(
+  private store: Store<{records: Records}>, private router:Router ) {
+    this.recordList = [];
     this.editModel = false;
    }
 
- ngOnInit() {
-   this.subsription = this.recordList$
-   .subscribe((state : State) => {
-     if (state.records && state.records.length != 0) {
+  ngOnInit(): void {
+   this.recordList$ =  this.store.select(getRecords);
+   this.recordList$.subscribe(item =>
+    {
+      // workaround item isnt the "records" but a reducer?
+      const state = {records: {recordList:[], errorMessage:'', editItemIndex : -1 , editItemId : -1} as Records};
+      Object.assign(state, item);
       this.records = state.records;
-     } else {
-       // load all records into the subscription initially, in case the delete records directly from db
-       this.dataStorageService.fetchRecords().subscribe(records => {
-        localStorage.setItem('recordList', JSON.stringify({records: records, editedRecord: null,
-          editedRecordAction: RecordListActions.LoadRecord}));
-        } );
-        this.records = state.records;
-     }
-   });
-   this.editModel = false;
- }
+    });
+  }
 
- ngOnDestroy (){
-   this.subsription.unsubscribe();
-   if (this.fetchSubscription) {
-     this.fetchSubscription.unsubscribe();
-   }
- }
-
+  // dispatch make the state take new value on the editItemIndex
 onEditItem(index : number) {
-  console.log('hier !!')
   this.editModel = true;
-  this.store.dispatch(new RecordListActions.StartEdit(index));
+  this.store.dispatch(startEdit({index: index, id : -1}));
  }
 }

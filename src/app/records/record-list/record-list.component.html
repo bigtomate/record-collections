@@ -8,10 +8,11 @@
     <label for="search-box" style="margin-right:20px;">Record Search</label>
   <input #searchBox id="search-box"  />
   </div>
-  <app-record-item *ngFor="let record of records; let i = index"
-    [record]="record" (click)="onEditItem(i)" [editModel]="editModel"></app-record-item>
-</div>
 
+
+  <app-record-item  *ngFor="let record of records?.recordList; index as i"
+    [record]="record" (click)="onEditItem(i)" [editModel]="editModel"></app-record-item>
+  </div>
   </div>
 
 </div>

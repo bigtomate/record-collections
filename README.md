@@ -26,4 +26,14 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
-# imoprtant for style npm install --save bootstrap@3
+# Reminders !!!!
+## imoprtant for style npm install --save bootstrap@3
+
+#### important "useDefineForClassFields": false,  in tsconfig.json otherwise pipe in the effects wouldn't work!!!!,   "baseUrl": "./" in tsconfig.json
+
+#### complaint by ng serve The expected type comes from property 'recordList' which is declared here on type '{ recordList: Record[]; }'
+
+    src/app/records/store/record-list.action.ts:20:67:
+      20 │ ...ccess=createAction(LOAD_RECORD_SUC,props<{recordList:Record[]}>())
+
+

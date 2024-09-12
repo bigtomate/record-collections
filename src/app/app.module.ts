@@ -1,23 +1,25 @@
-import { NgModule } from '@angular/core';
+import { isDevMode, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RecordsComponent } from './records/records.component'
 import { HeaderComponent } from './header/header.component';
-import { RecordService } from './records/reocrd-service';
+
 import { RecordListComponent } from './records/record-list/record-list.component';
 import { RecordItemComponent } from './records/record-list/record-item/record-item.component';
 import {HttpClientModule} from '@angular/common/http';
-import { CoreModule } from './core.module';
+
 
 import { ReactiveFormsModule } from '@angular/forms';
-import {provideStore, StoreModule} from '@ngrx/store'
-import {recordListReducer1} from './records/store/record-list.reducer'
+import {provideState, provideStore, StoreModule} from '@ngrx/store'
+//import {recordListReducer1} from './records/store/record-list.reducer'
 import { RecordEditComponent } from './records/record-list/record-edit/record-edit.component';
 import { RecordListModule } from './records/record-list/record-list.module';
 import {EffectsModule, provideEffects} from '@ngrx/effects'
 import {RecordListEffects} from './records/store/record-list.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { recordReducer } from './records/store/record-list.reducer';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,19 +32,21 @@ import {RecordListEffects} from './records/store/record-list.effects';
     BrowserModule,
     AppRoutingModule,
     CommonModule,
-    CoreModule,
     HttpClientModule,
     BrowserModule,
     // FormsModule,
      ReactiveFormsModule,
      HttpClientModule,
      AppRoutingModule,
-     StoreModule.forRoot({recordList: recordListReducer1}),
-//EffectsModule.forRoot([RecordListEffects]),
-RecordListModule
+     StoreModule.forRoot(),
+     StoreModule.forFeature('record', { records : recordReducer }),
+     StoreDevtoolsModule.instrument({ maxAge: false, logOnly: !isDevMode() }),
+     //StoreModule.forRoot({recordList: recordListReducer1}),
+EffectsModule.forRoot([RecordListEffects]),
+RecordListModule,
   ],
   bootstrap: [AppComponent],
-  providers:[RecordService]
- // providers:[RecordService, provideStore({recordList: recordListReducer1}), provideEffects()]
+  providers:[]
+ // providers:[RecordService, provideState({ name: 'record', reducer: recordReducer }), provideEffects()]
 })
 export class AppModule { }

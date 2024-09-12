@@ -1,77 +1,81 @@
-import { state } from '@angular/animations';
-import { createReducer,on, Action } from '@ngrx/store';
-import { Record } from '../../records/record-model';
-import { DataStorageService } from '../../shared/data-storage.service';
-import * as RecordListActions from './record-list.action';
+import { createReducer,on } from "@ngrx/store";
 
-export interface State {
-  records: Record [];
-  editedRecord: Record;
-  editedRecordAction: RecordListActions.RecordListActions | any;
+import { addrecord, addrecordsuccess, deleterecord, loadrecord, loadrecordfail, loadrecordsuccess, saverecord, startEdit, updaterecord, updaterecordsuccess } from "../store/record-list.action";
+import { Record, Records } from "../record-model";
+
+export const RecordState: Records = {
+  recordList: [],
+  errorMessage: '',
+  editItemIndex: -1,
+  editItemId: 0
 }
 
- const initialState: State = {
-  records: [],
-  editedRecord : new Record(1,'test','ddd','dddd',1999,'great artist','','','',''),
-  editedRecordAction: null
-};
- //export const recordListReducer1 =  createReducer(initialState);
-
-export function recordListReducer1(
-  state = initialState, action: any
-) {
-
-    const localStoreRecordList = localStorage.getItem('recordList');
-    if (localStoreRecordList) {
-     const storeState = JSON.parse(localStoreRecordList);
-     state = storeState;
-    }
-
-  switch (action.type) {
-    case RecordListActions.START_EDIT:
-      return {
-        ...state,
-        editedRecordAction: action,
-        editedRecord: { ...state.records[action.payload]}
-      };
-    case RecordListActions.UPDATE_RECORD:
-     const updatedRecord = action.recordToUpdate;
-     state.records[action.payload] = updatedRecord;
-     localStorage.setItem('recordList', JSON.stringify(state));
-       return {
-       ...state,
-       records: state.records,
-       editedRecordAction: action,
-       editedRecord: { ...state.records[action.payload]}
-     };
-     case RecordListActions.ADD_RECORD:
-      const addedRecord = action.recordToAdd;
-      state.records.push(addedRecord);
-      localStorage.setItem('recordList', JSON.stringify(state));
+ const _RecordReducer = createReducer(RecordState,
+    on(loadrecord, (state) => {
         return {
-        ...state,
-        records: state.records,
-        editedRecordAction: action,
-        editedRecord: { ...state.records[action.payload]}};
-     /*
-   case RecordListActions.DELETE_RECORD:
-     return {
-       ...state,
-       records: state.records.filter((r, rIndex) => {
-         return rIndex !== action.payload;
-       }),
-       editedRecordAction: -1,
-       editedRecord: null
-     };
-     */
-  /*  case RecordListActions.STOP_EDIT:
-     return {
-       ...state,
-       editedRecord: null,
-       editedRecordIndex: -1
-     }; */
-   default:
-     return state;
+            ...state
+        };
+    }),
+    on(loadrecordsuccess,(state, action)=>{
+        return {
+          ...state,
+          recordList:[... action.recordList],
+          errorMessage:''
+       }
+    }),
+    on(loadrecordfail,(state,action)=>{
+        console.log(action.errorDetail)
+        return{
+            ...state,
+            recordList:[],
+            errorMessage:action.errorDetail
+        }
+    }),
+    on(startEdit, (state, action) => {
+      return {
+          ...state,
+          editItemIndex: action.index,
+          editItemId: action.id
+      };
+   }),
+    // on(addrecord,(state,action)=>{
+    //     const _record={...action.recordinput};
+    //     _record.id=state.recordList.length+1;
+    //     return{
+    //         ...state,
+    //         recordList:[...state.recordList,_record]
+    //     }
+    // }),
+    on(addrecordsuccess,(state,action)=>{
+        const _record={...action.recordInput};
+        return{
+            ...state,
+            recordList:[...state.recordList,_record]
+        }
+    }),
+    on(updaterecordsuccess,(state, action)=>{
+        const _record={...action.recordInput};
+        const updatedrecord=state.recordList.map(record=>{
+          return _record.id === record.id? _record : record;
+        });
+        return{
+            ...state,
+            recordList: updatedrecord
+        }
+    }),
+/*      on(deleterecord,(state, action)=>{
+        const updatedrecord = state.recordList.filter((data: Record)=>{
+           return data.id ! == action.recordInput?.id
+        });
+        return{
+            ...state,
+            recordList: updatedrecord,
+            editItemId: action.recordInput?.id
+        }
+    }) */
+)
 
+export function recordReducer(state: any, action: any) {
+    return _RecordReducer(state, action);
 }
-}
+

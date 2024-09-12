@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import { Record } from "../records/record-model";
-import { RecordService } from "../records/reocrd-service";
-import {catchError, map, tap} from 'rxjs/operators'
+import { map, tap} from 'rxjs/operators'
 import {environment} from '../../environments/environment'
 import { Artist } from "../records/artist-model";
 import { Observable } from "rxjs";
@@ -10,8 +9,7 @@ import { Observable } from "rxjs";
 export class DataStorageService {
   errorMessage!: string;
 
- constructor(private http :HttpClient,
-    private recordService :RecordService) {
+ constructor(private http :HttpClient) {
 
  }
 
@@ -26,21 +24,13 @@ export class DataStorageService {
     }))
  }
 
- fetchRecords() {
- return  this.http.get<Record[]>(environment.records)
-   .pipe(map(records => {
-       return records.map(record => {
-           return {... record}
-       });
-   }), tap(records => {
-       console.log(records);
-       this.recordService.setRecords(records);
-   }))
+ fetchRecords() : Observable<Record[]>{
+ return  this.http.get<Record[]>(environment.records);
 }
 
 updateRecord(recordToUpdate: Record) : Observable<any>{
 return this.http.put<Record[]>(environment.records + '/'+ recordToUpdate.id, recordToUpdate).pipe(
-  map((response: any) => {
+  map((resp: any) => {
       return recordToUpdate
   })
 );
@@ -48,9 +38,17 @@ return this.http.put<Record[]>(environment.records + '/'+ recordToUpdate.id, rec
 
 addRecord(recordToAdd: Record) : Observable<any>{
   return this.http.post<Record[]>(environment.records, recordToAdd).pipe(
-    map((response: any) => {
+    map((resp: any) => {
         return recordToAdd
     })
   );
   }
+
+  deleteRecord(recordToDelete: Record): Observable<any> {
+    return this.http.delete<Record[]>(environment.records + '/delete/' + recordToDelete.id).pipe(
+      map((resp: any) => {
+     return null;
+      })
+    );
+    }
 }

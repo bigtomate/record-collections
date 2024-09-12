@@ -1,60 +1,40 @@
-import { Action, createAction, props } from '@ngrx/store';
+import { createAction, props } from "@ngrx/store";
+import { RecordEditComponent } from "../record-list/record-edit/record-edit.component";
+import { Record } from "../record-model";
 
-import { Record } from '../record-model';
+export const LOAD_RECORD ='[record collections] load record';
+export const LOAD_RECORD_SUC ='[record collections] load record success';
+export const START_EDIT ='[record collections] start edit record';
+export const SAVE_RECORD ='[record collections] save blo';
+export const LOAD_RECORD_FAIL ='[record collections] load record fail';
+export const ADD_RECORD_SUC ='[record collections] add record success';
+export const ADD_RECORD ='[record collections] add record';
+export const UPDATE_RECORD ='[record collections] update record';
+export const UPDATE_RECORD_SUC ='[record collections] update record success';
+export const DELETE_RECORD ='[record collections] delete record';
+export const DELETE_RECORD_SUC ='[record collections] delete record success';
+export const ACTION_FAILED ='[record collections] action on collections failed';
 
-export const ADD_RECORD = '[Record List] Add new Record';
-export const UPDATE_RECORD = '[Record List] Update Record';
-export const DELETE_RECORD = '[Record List] Delete Record';
-export const START_EDIT = '[Record List] Start Edit';
-export const STOP_EDIT = '[Record List] Stop Edit';
-export const LOAD_RECORD = '[Record List] Load the records';
+export const loadrecord=createAction(LOAD_RECORD);
 
-export class AddRecord implements Action {
-  readonly type = ADD_RECORD;
-  private recordToAdd!: Record;
-  constructor(public payload: number, public record: Record) {
-     this.recordToAdd = record;
-  }
-}
+export const loadrecordsuccess=createAction(LOAD_RECORD_SUC,props<{recordList:Record[]}>())
 
-export class UpdateRecord implements Action {
-  readonly type = UPDATE_RECORD;
-  private recordToUpdate!: Record;
-  constructor(public payload: number, public record: Record) {
-     this.recordToUpdate = record;
-  }
-}
+export const startEdit=createAction(START_EDIT,props<{index: number, id: number}>());
 
-export class DeleteRecord implements Action {
-  readonly type = DELETE_RECORD;
-  constructor(public payload: number) {
-  }
-}
+export const saverecord=createAction(SAVE_RECORD,props<{recordList:Record[]}>())
 
-export class StartEdit implements Action {
-  type = START_EDIT;
-  constructor(public payload: number) {
-  }
-}
+export const loadrecordfail=createAction(LOAD_RECORD_FAIL,props<{errorDetail: any}>())
 
-export class StopEdit implements Action {
-  readonly type = STOP_EDIT;
-}
+export const addrecord=createAction(ADD_RECORD,props<{recordInput:Record}>());
 
-export const LoadRecord = createAction(
-  '[Load store] inital',
-  props<{value: number}>()
-);
+export const addrecordsuccess=createAction(ADD_RECORD_SUC,props<{recordInput:Record}>());
 
-export const decrement = createAction(
-  '[Counter] Decrement',
-  props<{value: number}>()
-);
+export const updaterecord=createAction(UPDATE_RECORD,props<{recordInput:Record}>());
 
-export type RecordListActions =
-  | AddRecord
-  | UpdateRecord
-  | DeleteRecord
-  | StartEdit
-  | StopEdit
+export const updaterecordsuccess=createAction(UPDATE_RECORD_SUC,props<{recordInput:Record}>());
 
+export const deleterecord=createAction(DELETE_RECORD,props<{recordInput:Record}>());
+
+export const deleterecordsuccess=createAction(DELETE_RECORD_SUC,props<{recordInput:Record}>());
+
+export const actionFailed =createAction(ACTION_FAILED ,props<{errorDetail: any}>())
