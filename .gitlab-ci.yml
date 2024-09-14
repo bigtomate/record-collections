@@ -8,7 +8,7 @@ cache:
     - node_modules/
 
 build:
-  image: node:current-alpine3.19
+  image: node:current-alpine3.20
   stage: build
   only:
     - master
