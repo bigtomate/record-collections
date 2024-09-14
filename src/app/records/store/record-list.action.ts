@@ -5,6 +5,7 @@ import { Record } from "../record-model";
 export const LOAD_RECORD ='[record collections] load record';
 export const LOAD_RECORD_SUC ='[record collections] load record success';
 export const START_EDIT ='[record collections] start edit record';
+export const STOP_EDIT ='[record collections] stop edit record on clean';
 export const SAVE_RECORD ='[record collections] save blo';
 export const LOAD_RECORD_FAIL ='[record collections] load record fail';
 export const ADD_RECORD_SUC ='[record collections] add record success';
@@ -38,3 +39,5 @@ export const deleterecord=createAction(DELETE_RECORD,props<{recordInput:Record}>
 export const deleterecordsuccess=createAction(DELETE_RECORD_SUC,props<{recordInput:Record}>());
 
 export const actionFailed =createAction(ACTION_FAILED ,props<{errorDetail: any}>())
+
+export const stopEdit =createAction(STOP_EDIT, props<{index: number}>())

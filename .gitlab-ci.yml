@@ -1,0 +1,33 @@
+stages:
+  - build
+  - deploy_production
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+build:
+  image: node:current-alpine3.19
+  stage: build
+  only:
+    - master
+  script:
+    - echo $CI_COMMIT_SHORT_SHA
+    - npm install
+    - npm install -g @angular/cli
+    - ng build
+  artifacts:
+    paths:
+      - ./dist
+
+deploy_production:
+  image: google/cloud-sdk:alpine
+  stage: deploy_production
+  environment: Production
+  only:
+    - master
+  script:
+    - echo $SERVICE_ACCOUNT_WORK_TUBBS > /tmp/$CI_PIPELINE_ID.json
+    - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
+    - gcloud --quiet --project $PROJECT_ID_WORK_TUBBS app deploy app.yaml

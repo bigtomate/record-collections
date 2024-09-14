@@ -10,7 +10,7 @@ export const getRecordList=createSelector(getRecordsStateFeature,(state)=>{
     return state.recordList
 });
 
-export const getRecordbyId=(recordId : number)=>createSelector(getRecordsStateFeature,(state)=>{
+export const getRecordbyId=(recordId : string)=>createSelector(getRecordsStateFeature,(state)=>{
     return state.recordList.find((record:Record)=>record.id === recordId) as Record;
 })
 

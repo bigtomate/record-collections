@@ -1,6 +1,6 @@
 import { createReducer,on } from "@ngrx/store";
 
-import { addrecord, addrecordsuccess, deleterecord, loadrecord, loadrecordfail, loadrecordsuccess, saverecord, startEdit, updaterecord, updaterecordsuccess } from "../store/record-list.action";
+import { addrecord, addrecordsuccess, deleterecord, loadrecord, loadrecordfail, loadrecordsuccess, saverecord, startEdit, stopEdit, updaterecord, updaterecordsuccess } from "../store/record-list.action";
 import { Record, Records } from "../record-model";
 
 export const RecordState: Records = {
@@ -63,16 +63,12 @@ export const RecordState: Records = {
             recordList: updatedrecord
         }
     }),
-/*      on(deleterecord,(state, action)=>{
-        const updatedrecord = state.recordList.filter((data: Record)=>{
-           return data.id ! == action.recordInput?.id
-        });
+      on(stopEdit,(state, action)=>{
         return{
             ...state,
-            recordList: updatedrecord,
-            editItemId: action.recordInput?.id
+            editItemIndex : action.index
         }
-    }) */
+    })
 )
 
 export function recordReducer(state: any, action: any) {

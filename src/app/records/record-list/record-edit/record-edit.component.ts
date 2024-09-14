@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { Record, Records } from '../../record-model';
 import { ActivatedRoute } from '@angular/router';
 import { getRecords } from '../../store/record-list.selector';
-import { addrecord, deleterecord, updaterecord } from '../../store/record-list.action';
+import { addrecord, deleterecord, stopEdit, updaterecord } from '../../store/record-list.action';
 
 @Component({
   selector: 'app-record-edit',
@@ -73,7 +73,7 @@ export class RecordEditComponent implements OnInit, OnDestroy {
       if (this.editedItem?.id) {
         // after in backend the item has been changed then dispatch / update the store
         this.store.dispatch(updaterecord({recordInput: recordResult}))
-      } else if (this.editedItemIndex == -1) { // clear make the index to -1
+      } else  { // clear make the index to -1
         this.store.dispatch(addrecord({recordInput: recordResult}))
       }
       this.editModel = false;
@@ -83,7 +83,9 @@ export class RecordEditComponent implements OnInit, OnDestroy {
     onClear() {
       this.slForm?.reset();
       this.editModel = false;
-    //  this.store.dispatch(new RecordListActions.StopEdit());
+      this.editedItemIndex == -1;
+      this.editedItem = null;
+      this.store.dispatch(stopEdit({index: -1}));
     }
 
     onDelete() {

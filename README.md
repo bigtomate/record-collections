@@ -36,4 +36,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
     src/app/records/store/record-list.action.ts:20:67:
       20 │ ...ccess=createAction(LOAD_RECORD_SUC,props<{recordList:Record[]}>())
 
+## enable fire base
+npm i firebase @angular/fire --save
+
 

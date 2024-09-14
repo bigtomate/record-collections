@@ -8,7 +8,6 @@ import { Observable } from "rxjs";
 @Injectable({providedIn :'root'})// need httpService injected here, later
 export class DataStorageService {
   errorMessage!: string;
-
  constructor(private http :HttpClient) {
 
  }
@@ -28,7 +27,7 @@ export class DataStorageService {
  return  this.http.get<Record[]>(environment.records);
 }
 
-updateRecord(recordToUpdate: Record) : Observable<any>{
+updateRecord(recordToUpdate: Record) : Observable<Record>{
 return this.http.put<Record[]>(environment.records + '/'+ recordToUpdate.id, recordToUpdate).pipe(
   map((resp: any) => {
       return recordToUpdate
@@ -36,7 +35,7 @@ return this.http.put<Record[]>(environment.records + '/'+ recordToUpdate.id, rec
 );
 }
 
-addRecord(recordToAdd: Record) : Observable<any>{
+addRecord(recordToAdd: Record) : Observable<Record>{
   return this.http.post<Record[]>(environment.records, recordToAdd).pipe(
     map((resp: any) => {
         return recordToAdd
@@ -47,7 +46,7 @@ addRecord(recordToAdd: Record) : Observable<any>{
   deleteRecord(recordToDelete: Record): Observable<any> {
     return this.http.delete<Record[]>(environment.records + '/delete/' + recordToDelete.id).pipe(
       map((resp: any) => {
-     return null;
+
       })
     );
     }

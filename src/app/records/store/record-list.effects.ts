@@ -5,23 +5,33 @@ import { EMPTY, catchError, exhaustMap, map, mergeMap, of, switchMap , withLates
 import { Record, Records } from "../record-model"
 import { DataStorageService } from "src/app/shared/data-storage.service"
 import {Store} from '@ngrx/store'
-import { getRecords } from "./record-list.selector"
 import { LogError } from "src/app/shared/store/app/app.actions"
+import { DataStorageFireStoreService } from "src/app/shared/data-storage.firestore.service"
+import { environment } from "src/environments/environment"
 @Injectable()
 export class RecordListEffects {
-    constructor(private action$: Actions, private store: Store, private service: DataStorageService) {
+    constructor(private action$: Actions, private store: Store, private service: DataStorageService, private fireStoreService: DataStorageFireStoreService) {
 
     }
     _loadrecord = createEffect(() =>
         this.action$
             .pipe(
                 ofType(LOAD_RECORD),
-                exhaustMap((action) => {
-                    return this.service.fetchRecords().pipe(
-                        map((data) => {
-                           localStorage.setItem('recordList', JSON.stringify({'recordList': data}));
-                            return loadrecordsuccess({ recordList : data });
-
+                exhaustMap(action => {
+                  if (environment.firebase) {
+                    return this.fireStoreService.fetchRecords().then(resp => {
+                      const recordList = resp.docs.map((doc: { data: () => any; id: any }) => (
+                         { ...doc.data(), id: doc.id}
+                        ));
+                      localStorage.setItem('recordList', JSON.stringify({'recordList': recordList}));
+                      return loadrecordsuccess({ recordList : recordList });
+                    });
+                  }
+                  // the fast api return obserable instead fireStore is the promise with type document
+                return this.service.fetchRecords().pipe(
+                        map((recordList) => {
+                           localStorage.setItem('recordList', JSON.stringify({'recordList': recordList}));
+                            return loadrecordsuccess({ recordList : recordList });
                         }),
                         catchError((_error) => of(loadrecordfail({ errorDetail: _error })))
                     )
@@ -33,12 +43,21 @@ export class RecordListEffects {
         this.action$.pipe(
             ofType(addrecord),
             switchMap(action =>
-                this.service.addRecord(action.recordInput).pipe(
-                    switchMap(record => of(
-                      // unlike update, need reload completely because the id need to be delivered for coming update
+                this.fireStoreService.addRecord(action.recordInput).pipe(
+                  switchMap(() =>
+                    of(
+                      // unlike update, need reload completely because the id is need to be delivered for coming update
                        loadrecord()
-                    )),
-                )
+                    )
+                  ))
+
+         // if not use the firebase
+         /*  this.service.addRecord(action.recordInput).pipe(
+                  switchMap(record => of(
+                    // unlike update, need reload completely because the id is need to be delivered for coming update
+                     loadrecord()
+                  )),
+              ) */
             )
         )
     );
@@ -47,12 +66,20 @@ export class RecordListEffects {
         this.action$.pipe(
             ofType(updaterecord),
             switchMap(action =>
-                this.service.updateRecord(action.recordInput).pipe(
+              this.fireStoreService.updateRecord(action.recordInput).pipe(
+                switchMap(resp => of(
+                    updaterecordsuccess({recordInput:action.recordInput}),
+                )),
+                catchError((_error) => of(loadrecordfail({ errorDetail: _error })))
+               )
+
+             // if not use the firebase
+             /*    this.service.updateRecord(action.recordInput).pipe(
                     switchMap(resp => of(
                         updaterecordsuccess({recordInput:action.recordInput}),
                     )),
                     catchError((_error) => of(loadrecordfail({ errorDetail: _error })))
-                   )
+                   ) */
             )
         )
     );
@@ -61,13 +88,20 @@ export class RecordListEffects {
     this.action$.pipe(
         ofType(deleterecord),
         switchMap(action =>
-            this.service.deleteRecord(action.recordInput).pipe(
+          this.fireStoreService.deleteRecord(action.recordInput).pipe(
+            switchMap(resp => of(
+              loadrecord()
+            )),
+            catchError((_error) => of(loadrecordfail({ errorDetail: _error })))
+           )
+        )
+       /*      this.service.deleteRecord(action.recordInput).pipe(
                 switchMap(resp => of(
                   loadrecord()
                 )),
                 catchError((_error) => of(loadrecordfail({ errorDetail: _error })))
                )
-            )
+            ) */
     )
 );
 
