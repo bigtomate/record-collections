@@ -28,6 +28,6 @@ deploy_production:
   only:
     - master
   script:
-    - echo $SERVICE_ACCOUNT_WORK_TUBBS > /tmp/$CI_PIPELINE_ID.json
+    - echo $SERVICE_ACCOUNT_WORK_TUBBS_RECORD > /tmp/$CI_PIPELINE_ID.json
     - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
-    - gcloud --quiet --project $PROJECT_ID_WORK_TUBBS app deploy app.yaml
+    - gcloud --quiet --project $PROJECT_ID_WORK_TUBBS_RECORD app deploy app.yaml
