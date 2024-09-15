@@ -1,18 +1,17 @@
 <div class="row">
 
 
-  <div class="col-xs-6">
+  <div class="col-md-10">
    <app-record-edit></app-record-edit>
-<div style="margin-top: 20px;">
-  <div style="margin-bottom: 20px;">
-    <label for="search-box" style="margin-right:20px;">Record Search</label>
-  <input #searchBox id="search-box"  />
+    <div style="margin-bottom: 20px; margin-top: 20px;">
+      <label for="search-box" style="margin-right:20px;">Record Search</label>
+      <input #searchBox id="search-box"  />
+    </div>
   </div>
-
-
-  <app-record-item  *ngFor="let record of records?.recordList; index as i"
-    [record]="record" (click)="onEditItem(i)" [editModel]="editModel"></app-record-item>
+<div class="col-md-12">
+  <div style="margin-top: 20px; padding-right:10px; max-height:500px;overflow:scroll">
+    <app-record-item  *ngFor="let record of records?.recordList; index as i"
+                      [record]="record" (click)="onEditItem(i)" [editModel]="editModel"></app-record-item>
   </div>
-  </div>
-
+</div>
 </div>
