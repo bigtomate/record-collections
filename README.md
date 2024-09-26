@@ -1,6 +1,7 @@
 # RecordCollections
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.3.
+![img_1.png](img_1.png)
 
 ## Development server
 
@@ -38,6 +39,3 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## enable fire base
 npm i firebase @angular/fire --save
-
-
-![img_1.png](img_1.png)
