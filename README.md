@@ -40,3 +40,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 npm i firebase @angular/fire --save
 
 
+![img_1.png](img_1.png)
