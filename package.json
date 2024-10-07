@@ -23,8 +23,7 @@
     "@ngrx/store": "^18.0.2",
     "@ngrx/store-devtools": "^18.0.2",
     "bootstrap": "^3.4.1",
-    "firebase": "^10.13.1",
-    "rxfire": "^6.0.5",
+    "firebase": "^10.14.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
