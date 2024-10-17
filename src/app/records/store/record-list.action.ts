@@ -4,6 +4,7 @@ import { Record } from "../record-model";
 
 export const LOAD_RECORD ='[record collections] load record';
 export const LOAD_RECORD_SUC ='[record collections] load record success';
+export const LOAD_SEARCH ='[record collections] by search result';
 export const START_EDIT ='[record collections] start edit record';
 export const STOP_EDIT ='[record collections] stop edit record on clean';
 export const SAVE_RECORD ='[record collections] save blo';
@@ -41,3 +42,5 @@ export const deleterecordsuccess=createAction(DELETE_RECORD_SUC,props<{recordInp
 export const actionFailed =createAction(ACTION_FAILED ,props<{errorDetail: any}>())
 
 export const stopEdit =createAction(STOP_EDIT, props<{index: number}>())
+
+export const loadSearch =createAction(LOAD_SEARCH, props<{searchQuery: string}>())

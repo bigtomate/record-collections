@@ -1,0 +1,32 @@
+.autocomplete-container {
+  position: relative;
+  width: 200px;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.artistname {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  width: 100%;
+  z-index: 1000;
+}
+
+.artistname ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.artistname li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.artistname li:hover {
+  background-color: #f0f0f0;
+}

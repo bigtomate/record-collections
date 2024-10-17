@@ -1,11 +1,23 @@
 <div class="row">
-
-
   <div class="col-md-10">
    <app-record-edit></app-record-edit>
-    <div style="margin-bottom: 20px; margin-top: 20px;">
+    <div style="margin-bottom: 20px; margin-top: 20px; ">
       <label for="search-box" style="margin-right:20px;">Record Search</label>
-      <input #searchBox id="search-box"  />
+      <div class="autocomplete-container">
+        <input #searchBox id="search-box"  type="text"
+        placeholder="Search..."
+        (keyup)="updateQuery($event)"
+        [formControl]="searchControl">
+        <div class="artistname" *ngIf="this.searchSuggestion.length > 0">
+          <ul >
+            <li *ngFor="let suggestion of searchSuggestion"
+                (click)="selectSuggestion(suggestion)">
+              {{ suggestion }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
     </div>
   </div>
 <div class="col-md-12">

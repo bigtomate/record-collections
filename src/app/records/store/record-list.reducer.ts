@@ -1,6 +1,6 @@
 import { createReducer,on } from "@ngrx/store";
 
-import { addrecord, addrecordsuccess, deleterecord, loadrecord, loadrecordfail, loadrecordsuccess, saverecord, startEdit, stopEdit, updaterecord, updaterecordsuccess } from "../store/record-list.action";
+import { addrecord, addrecordsuccess, deleterecord, loadrecord, loadrecordfail, loadrecordsuccess, loadSearch, saverecord, startEdit, stopEdit, updaterecord, updaterecordsuccess } from "../store/record-list.action";
 import { Record, Records } from "../record-model";
 
 export const RecordState: Records = {
@@ -68,7 +68,15 @@ export const RecordState: Records = {
             ...state,
             editItemIndex : action.index
         }
-    })
+    }),on(loadSearch ,(state, action)=>{
+      const searchQuery = action.searchQuery;
+     const searchResult =  state.recordList
+     .filter(record => searchQuery.toLowerCase() === record.artistname.toLowerCase());
+      return{
+          ...state,
+          recordList: searchResult
+      }
+  })
 )
 
 export function recordReducer(state: any, action: any) {
